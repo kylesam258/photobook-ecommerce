@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Product - Memorieo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8983FF;
+            --secondary-color: #66BB6A;
+            --accent-color: #FF8A80;
+            --background-color: #1F2937;
+            --text-color: #E5E7EB;
+            --card-bg: #374151;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            transition: color 0.3s;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-add {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-exit {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+
+        #addCategoryForm {
+            background-color: rgba(var(--primary-color), 0.1);
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+
+        #addCategoryForm input {
+            margin-bottom: 10px;
+        }
+
+        .file-input-wrapper {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+        }
+
+        .file-input-wrapper input[type=file] {
+            font-size: 100px;
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            cursor: pointer;
+        }
+
+        .file-input-wrapper .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+        }
+
+        #imagePreview {
+            max-width: 100%;
+            margin-top: 10px;
+            border-radius: 10px;
+            display: none;
+        }
+
+        .mode-toggle {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: none;
+            border: none;
+            color: #ffffff;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .form-group {
+            animation: fadeIn 0.5s ease-out forwards;
+            opacity: 0;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+        .form-group:nth-child(6) { animation-delay: 0.6s; }
+        .form-group:nth-child(7) { animation-delay: 0.7s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="GET" action="{{ url_for('seller_dashboard') }}">
+            <button type="submit" class="btn btn-exit">Exit</button>
+        </form>
+        <div class="header">Add New Product</div>
+        <div class="form-content">
+            <form id="addProductForm" method="POST" action="{{ url_for('add_product') }}" enctype="multipart/form-data">
+                <div class="form-group">
+                    <label for="productName">Product Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-tag"></i>
+                        <input type="text" id="productName" name="product_name" class="input-field" placeholder="Enter product name" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productSize">Size</label>
+                    <div class="input-icon">
+                        <i class="fas fa-ruler"></i>
+                        <input type="text" id="productSize" name="size" class="input-field" placeholder="e.g., 5x5" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productPages">Pages</label>
+                    <div class="input-icon">
+                        <i class="fas fa-book-open"></i>
+                        <input type="number" id="productPages" name="pages" class="input-field" placeholder="Number of pages" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productStock">Stock</label>
+                    <div class="input-icon">
+                        <i class="fas fa-boxes"></i>
+                        <input type="number" id="productStock" name="stock" class="input-field" placeholder="Available stock" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="productPrice">Price</label>
+                    <div class="input-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                        <input type="number" id="productPrice" name="price" class="input-field" placeholder="Product price" required step="0.01">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="category_id">Category</label>
+                    <div class="input-icon">
+                        <i class="fas fa-folder"></i>
+                        <select id="category_id" name="category_id" class="input-field" required>
+                            <option value="">Select Category</option>
+                        </select>
+                    </div>
+                    <button type="button" id="addCategoryButton" class="btn btn-add" style="margin-top: 10px;">
+                        <i class="fas fa-plus"></i> Add New Category
+                    </button>
+                </div>
+                
+                <div id="addCategoryForm">
+                    <div class="form-group">
+                        <label for="newCategoryName">New Category Name</label>
+                        <div class="input-icon">
+                            <i class="fas fa-folder-plus"></i>
+                            <input type="text" id="newCategoryName" class="input-field" placeholder="Enter new category name">
+                        </div>
+                    </div>
+                    <button type="button" id="saveCategoryButton" class="btn btn-add">Save Category</button>
+                </div>
+                
+                <div class="form-group">
+                    <label for="productImage">Product Image</label>
+                    <div class="file-input-wrapper">
+                        <button class="btn" type="button">Choose File</button>
+                        <input type="file" id="productImage" name="image" accept="image/*" required>
+                    </div>
+                    <img id="imagePreview" src="#" alt="Image preview" />
+                </div>
+
+                <button type="submit" class="btn"><i class="fas fa-plus-circle"></i> Add Product</button>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        
+            // Fetch existing categories
+            fetch('/categories')
+                .then(response => response.json())
+                .then(categories => {
+                    const dropdown = document.getElementById('category_id');
+                    categories.forEach(category => {
+                        const option = document.createElement('option');
+                        option.value = category.id;
+                        option.textContent = category.name;
+                        dropdown.appendChild(option);
+                    });
+                })
+                .catch(error => console.error('Error fetching categories:', error));
+
+            // Show "Add New Category" form
+            document.getElementById('addCategoryButton').addEventListener('click', () => {
+                document.getElementById('addCategoryForm').style.display = 'block';
+            });
+
+            // Save new category
+            document.getElementById('saveCategoryButton').addEventListener('click', () => {
+                const newCategoryName = document.getElementById('newCategoryName').value.trim();
+
+                if (newCategoryName === "") {
+                    alert('Please enter a category name.');
+                    return;
+                }
+
+                fetch('/add_category', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ category_name: newCategoryName })
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.error) {
+                            alert(data.error);
+                            return;
+                        }
+
+                        const dropdown = document.getElementById('category_id');
+                        const option = document.createElement('option');
+                        option.value = data.id;
+                        option.textContent = data.name;
+                        dropdown.appendChild(option);
+                        dropdown.value = data.id;
+
+                        document.getElementById('addCategoryForm').style.display = 'none';
+                        document.getElementById('newCategoryName').value = '';
+                    })
+                    .catch(error => console.error('Error adding category:', error));
+            });
+
+            // Image preview functionality
+            document.getElementById('productImage').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('imagePreview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    }
+                    reader.readAsDataURL(file);
+                }
+            });
+    </script>
+</body>
+</html>

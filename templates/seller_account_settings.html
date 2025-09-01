@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Account Settings</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+        :root {
+            --primary-color: #6A00F4;
+            --secondary-color: #00D4FF;
+            --background-gradient: linear-gradient(135deg, #1E1E2F, #2F3458);
+            --card-bg: rgba(255, 255, 255, 0.1);
+            --text-color: #EAEAEA;
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--background-gradient);
+            color: var(--text-color);
+            overflow-x: hidden;
+        }
+
+        .card {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 1rem;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: #FFF;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(106, 0, 244, 0.6);
+        }
+
+        .input-field {
+            background: var(--card-bg);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            color: var(--text-color);
+        }
+
+        .input-field::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        .input-field:focus {
+            border-color: var(--primary-color);
+            outline: none;
+            box-shadow: 0 0 10px rgba(106, 0, 244, 0.5);
+        }
+
+        .btn-exit {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .btn-exit:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.05);
+        }
+    </style>
+</head>
+<body>
+    <div class="min-h-screen flex items-center justify-center px-6">
+        <div class="absolute top-4 right-4">
+            <a href="{{ url_for('seller_dashboard') }}" 
+               class="flex items-center gap-2 px-4 py-2 rounded-lg text-white bg-red-500 hover:bg-red-600 transition-all duration-300 ease-in-out">
+                <i class="fas fa-arrow-left"></i>
+                <span>Back to Dashboard</span>
+            </a>
+        </div>
+        <div class="w-full max-w-3xl card p-8">
+            <h1 class="text-3xl font-bold text-center mb-6">Account Settings</h1>
+            
+            <!-- Flash Messages -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    {% for category, message in messages %}
+                        {% if category.startswith('account_') %}
+                            <div id="flash-message" class="p-4 mb-4 rounded-lg flex justify-between items-center {% if category == 'account_success' %}bg-green-500{% else %}bg-red-500{% endif %} text-white">
+                                <span>{{ message }}</span>
+                                <button onclick="closeFlash()" class="text-white hover:text-gray-200">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                {% endif %}
+            {% endwith %}
+
+            <p class="text-sm text-center text-gray-400 mb-10">
+                Update your account information with ease. Fields marked with <span class="text-red-500">*</span> are required.
+            </p>
+            
+            <form action="{{ url_for('update_seller_account') }}" method="POST" onsubmit="return validateForm()">
+                <!-- Display Current Name -->
+                <div class="mb-6">
+                    <label class="block text-sm mb-2">Current Name</label>
+                    <div class="bg-gray-800 text-white px-4 py-2 rounded-lg font-medium"> 
+                        {{ session['name'] }}
+                    </div>                                 
+                </div>
+                
+                <!-- Editable Fields -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                    <!-- New Name -->
+                    <div>
+                        <label for="name" class="block text-sm mb-2">New Name <span class="text-red-500">*</span></label>
+                        <input type="text" id="name" name="name" value="{{ session['name'] }}" class="w-full input-field px-4 py-2 rounded-lg" required>
+                    </div>
+                    <!-- New Email -->
+                    <div>
+                        <label for="email" class="block text-sm mb-2">New Email Address <span class="text-red-500">*</span></label>
+                        <input type="email" id="email" name="email" value="{{ session['email'] }}" class="w-full input-field px-4 py-2 rounded-lg" required>
+                    </div>
+                </div>
+                
+                <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mb-6">
+                    <!-- New Password -->
+                    <div>
+                        <label for="password" class="block text-sm mb-2">New Password</label>
+                        <input type="password" id="password" name="password" placeholder="Enter new password (optional)" class="w-full input-field px-4 py-2 rounded-lg" minlength="6">
+                    </div>
+                    <!-- Confirm New Password -->
+                    <div>
+                        <label for="confirm-password" class="block text-sm mb-2">Confirm New Password</label>
+                        <input type="password" id="confirm-password" name="confirm_password" placeholder="Confirm new password" class="w-full input-field px-4 py-2 rounded-lg">
+                    </div>
+                </div>
+                
+                <!-- Save Changes Button -->
+                <div class="text-center">
+                    <button type="submit" class="btn-primary px-6 py-3 rounded-lg font-medium uppercase tracking-wide">
+                        Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+    function validateForm() {
+        const password = document.getElementById('password').value;
+        const confirmPassword = document.getElementById('confirm-password').value;
+        
+        if (password || confirmPassword) {
+            if (password !== confirmPassword) {
+                alert("Passwords do not match!");
+                return false;
+            }
+            
+            if (password.length < 6) {
+                alert("Password must be at least 6 characters long!");
+                return false;
+            }
+        }
+        
+        return true;
+    }
+    </script>
+</body>
+</html>

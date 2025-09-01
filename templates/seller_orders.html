@@ -1,0 +1,353 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Seller Orders - Memorieo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-color: #4CAF50;
+            --accent-color: #FF6B6B;
+            --background-color: #f0f2f5;
+            --text-color: #333333;
+            --card-bg: #ffffff;
+            --pending-color: #FFA726;
+            --shipped-color: #29B6F6;
+            --delivered-color: #66BB6A;
+            --cancelled-color: #EF5350;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        h1 {
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 2rem;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            animation: gradientShift 5s ease infinite;
+        }
+
+        @keyframes gradientShift {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .home-button {
+            display: inline-block;
+            background-color: var(--primary-color);
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            transition: background-color 0.3s;
+        }
+
+        .home-button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .status-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 2rem;
+        }
+
+        .status-tab {
+            padding: 0.5rem 1rem;
+            margin: 0 0.5rem;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .status-tab:hover {
+            transform: translateY(-2px);
+        }
+
+        .status-tab.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .orders-container {
+            display: grid;
+            gap: 2rem;
+        }
+
+        .order-card {
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            padding: 1.5rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .order-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .order-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .order-id {
+            font-weight: bold;
+            font-size: 1.2rem;
+        }
+
+        .order-status {
+            padding: 0.25rem 0.75rem;
+            border-radius: 20px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            color: white;
+        }
+
+        .order-status.pending { background-color: var(--pending-color); }
+        .order-status.shipped { background-color: var(--shipped-color); }
+        .order-status.delivered { background-color: var(--delivered-color); }
+        .order-status.cancelled { background-color: var(--cancelled-color); }
+
+        .order-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .detail-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .detail-label {
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.6);
+            margin-bottom: 0.25rem;
+        }
+
+        .detail-value {
+            font-weight: 500;
+        }
+
+        .products-list {
+            margin-top: 1rem;
+        }
+
+        .product-item {
+            padding: 0.5rem;
+            margin-bottom: 0.5rem;
+            background-color: rgba(0, 0, 0, 0.05);
+            border-radius: 5px;
+        }
+
+        .product-name {
+            font-weight: 600;
+            display: block;
+            margin-bottom: 0.25rem;
+        }
+
+        .product-details {
+            font-size: 0.9rem;
+            color: rgba(0, 0, 0, 0.8);
+        }
+
+        .status-update-form {
+            margin-top: 1rem;
+        }
+
+        .status-update-form select {
+            padding: 0.5rem;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            margin-right: 0.5rem;
+        }
+
+        .status-update-form button {
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .status-update-form button:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .no-orders {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            font-style: italic;
+            color: rgba(0, 0, 0, 0.6);
+        }
+
+        @media (max-width: 768px) {
+            .status-tabs {
+                flex-wrap: wrap;
+            }
+
+            .status-tab {
+                margin-bottom: 0.5rem;
+            }
+
+            .order-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .order-status {
+                margin-top: 0.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="/seller_dashboard" class="home-button">
+            <i class="fas fa-home"></i> Home
+        </a>  
+
+        <h1>Orders</h1>
+
+        <div class="status-tabs">
+            <div class="status-tab active" data-status="all">All Orders</div>
+            <div class="status-tab" data-status="Pending">Pending</div>
+            <div class="status-tab" data-status="Shipped">Shipped</div>
+            <div class="status-tab" data-status="Delivered">Delivered</div>
+            <div class="status-tab" data-status="Cancelled">Cancelled</div>
+        </div>
+
+        <div class="orders-container">
+            {% for order in orders %}
+                <div class="order-card" data-status="{{ order.status }}">
+                    <div class="order-header">
+                        <span class="order-status {{ order.status.lower() }}">{{ order.status }}</span>
+                    </div>
+                    <div class="order-details">
+                        <div class="detail-group">
+                            <span class="detail-label">Buyer</span>
+                            <span class="detail-value">{{ order.buyer_name }}</span>
+                        </div>
+                        <div class="detail-group">
+                            <span class="detail-label">Email</span>
+                            <span class="detail-value">{{ order.buyer_email }}</span>
+                        </div>
+                        <div class="detail-group">
+                            <span class="detail-label">Address</span>
+                            <span class="detail-value">{{ order.buyer_address }}</span>
+                        </div>
+                        <div class="detail-group">
+                            <span class="detail-label">Order Date</span>
+                            <span class="detail-value">{{ order.created_at }}</span>
+                        </div>
+                        <div class="detail-group">
+                            <span class="detail-label">Payment Method</span>
+                            <span class="detail-value">{{ order.payment_method }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="products-list">
+                        <span class="detail-label">Products</span>
+                        {% for product in order.products %}
+                            <div class="product-item">
+                                <span class="product-name">{{ product.name }}</span>
+                                <span class="product-details">
+                                    Quantity: {{ product.quantity }} | 
+                                    Size: {{ product.size }} | 
+                                    Pages: {{ product.pages }} | 
+                                    Price: ₱{{ product.price }}
+                                </span>
+                            </div>
+                        {% endfor %}
+                    </div>
+
+                    <form action="{{ url_for('update_order_status') }}" method="POST" class="status-update-form">
+                        <input type="hidden" name="order_id" value="{{ order.order_id }}">
+                        <select name="status">
+                            <option value="Pending" {% if order.status == 'Pending' %}selected{% endif %}>Pending</option>
+                            <option value="Shipped" {% if order.status == 'Shipped' %}selected{% endif %}>Shipped</option>
+                            <option value="Delivered" {% if order.status == 'Delivered' %}selected{% endif %}>Delivered</option>
+                            <option value="Cancelled" {% if order.status == 'Cancelled' %}selected{% endif %}>Cancelled</option>
+                        </select>
+                        <button type="submit">Update Status</button>
+                    </form>
+                </div>
+            {% else %}
+                <div class="no-orders">
+                    No orders found.
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const statusTabs = document.querySelectorAll('.status-tab');
+            const orderCards = document.querySelectorAll('.order-card');
+            const noOrders = document.querySelector('.no-orders');
+
+            statusTabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    const status = tab.getAttribute('data-status');
+                    
+                    statusTabs.forEach(t => t.classList.remove('active'));
+                    tab.classList.add('active');
+
+                    let visibleOrders = 0;
+                    orderCards.forEach(card => {
+                        if (status === 'all' || card.getAttribute('data-status') === status) {
+                            card.style.display = 'block';
+                            visibleOrders++;
+                        } else {
+                            card.style.display = 'none';
+                        }
+                    });
+
+                    if (visibleOrders === 0) {
+                        noOrders.style.display = 'block';
+                        noOrders.textContent = `No ${status} orders found.`;
+                    } else {
+                        noOrders.style.display = 'none';
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+</html>

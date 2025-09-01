@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Address Dashboard - Memorieo</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #6C63FF;
+            --secondary-color: #4CAF50;
+            --accent-color: #FF6B6B;
+            --background-color: #121212;
+            --text-color: #f0f2f5;
+            --light-text-color: #f0f2f5;
+            --card-bg: #1e1e1e;
+            --card-shadow: 0 8px 32px rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .navbar {
+            background-color: rgba(108, 99, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .navbar-brand, .nav-link {
+            color: var(--text-color) !important;
+            transition: color 0.3s;
+        }
+
+        .navbar-brand:hover, .nav-link:hover {
+            color: var(--primary-color) !important;
+        }
+
+        .hero-section {
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            color: var(--light-text-color);
+            padding: 4rem 0;
+            text-align: center;
+        }
+
+        .hero-title {
+            font-size: 3rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, var(--light-text-color), var(--accent-color));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        .address-card {
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: var(--card-shadow);
+            margin-bottom: 20px;
+        }
+
+        .address-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.2);
+        }
+
+        .address-header {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 15px;
+            border-radius: 15px 15px 0 0;
+        }
+
+        .address-body {
+            padding: 20px;
+        }
+
+        .btn-custom {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-custom:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            border: none;
+            border-radius: 25px;
+            padding: 10px 20px;
+            transition: background-color 0.3s, transform 0.3s;
+        }
+
+        .btn-danger:hover {
+            background-color: #ff4f4f;
+            transform: translateY(-2px);
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 2rem 0;
+            margin-top: auto;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .modal-content {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border-radius: 15px;
+        }
+
+        .modal-header {
+            border-bottom: none;
+            padding: 2rem 2rem 1rem;
+        }
+
+        .modal-body {
+            padding: 1rem 2rem;
+        }
+
+        .modal-footer {
+            border-top: none;
+            padding: 1rem 2rem 2rem;
+        }
+
+        .form-control {
+            background-color: var(--background-color);
+            color: var(--text-color);
+            border: none;
+            border-radius: 10px;
+            padding: 0.75rem 1rem;
+        }
+
+        .form-control:focus {
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+
+        .address-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .address-actions {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 15px;
+        }
+
+        .address-type {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: var(--secondary-color);
+            color: var(--light-text-color);
+            padding: 5px 10px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+        }
+
+        .search-bar {
+            margin-bottom: 20px;
+        }
+
+        .search-input {
+            background-color: var(--card-bg);
+            color: var(--text-color);
+            border: 1px solid var(--primary-color);
+            border-radius: 25px;
+            padding: 10px 20px;
+        }
+
+        .search-input:focus {
+            box-shadow: 0 0 0 2px var(--primary-color);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Memorieo</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="/buyer_dashboard"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="confirmLogout(event)">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <div class="container">
+            <h1 class="hero-title">Your Addresses</h1>
+            <p>Manage your delivery destinations with ease</p>
+        </div>
+    </section>
+
+    <div class="container mt-5">
+        <div class="address-grid" id="addressList">
+            {% if addresses %}
+                {% for address in addresses %}
+                    <div class="address-card">
+                        <div class="address-header">
+                            <h5 class="mb-0">{{ address['name'] }}</h5>
+                        </div>
+                        <div class="address-body">
+                            <span class="address-type">{{ address['type'] }}</span>
+                            <p>{{ address['address'] }}</p>
+                            <p>Phone: {{ address['phone'] }}</p>
+                            <div class="address-actions">
+                                <button class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#deleteAddressModal-{{ address['id'] }}">Delete</button>
+                            </div>
+                        </div>
+                    </div>
+    
+                    <!-- Delete Confirmation Modal -->
+                    <div class="modal fade" id="deleteAddressModal-{{ address['id'] }}" tabindex="-1" aria-labelledby="deleteAddressModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="deleteAddressModalLabel">Delete Address</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <p>Are you sure you want to delete this address?</p>
+                                    <p><strong>{{ address['address'] }}</strong></p>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                                    <form action="{{ url_for('delete_address', address_id=address['id']) }}" method="POST">
+                                        <button type="submit" class="btn btn-danger">Yes, Delete</button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <p class="text-center">No addresses found. Add your first address!</p>
+            {% endif %}
+        </div>
+    
+        <div class="text-center mt-4">
+            <button class="btn btn-custom" onclick="window.location.href='/add_address'">Add New Address</button>
+        </div>
+    </div>
+    
+
+    <footer class="footer text-center mt-5">
+            <div class="container">
+                <p>&copy; 2024 Memorieo. All Rights Reserved.</p>
+                <div class="mt-3">
+                    <a href="https://www.facebook.com/p/Memorieo-61569346288415/?mibextid=ZbWKwL" target="blank" class="text-white me-3">
+                        <i class="fab fa-facebook-f"></i>
+                    </a>
+                    <a href="https://x.com/memorieo481?t=Doe64mYHAHhNPmRPXm0V-Q&s=07" target="blank" class="text-white me-3">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://www.instagram.com/me_morieo/profilecard/?igsh=N2tqZDVuYjhqc2p2" target="blank" class="text-white me-3">
+                        <i class="fab fa-instagram"></i>
+                    </a>
+                    <a href="https://pin.it/7aPrK3wOW" target="blank" class="text-white">
+                        <i class="fab fa-pinterest-p"></i>
+                    </a>
+                </div>
+            </div>
+        </footer>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.min.js"></script>
+
+    <script>
+        function confirmLogout(event) {
+            event.preventDefault();
+            const confirmed = confirm("Are you sure you want to log out?");
+            if (confirmed) {
+                window.location.href = "/logout";
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('addressSearch');
+            const addressList = document.getElementById('addressList');
+            const addresses = addressList.getElementsByClassName('address-card');
+
+            searchInput.addEventListener('input', function() {
+                const searchTerm = this.value.toLowerCase();
+
+                for (let address of addresses) {
+                    const addressText = address.textContent.toLowerCase();
+                    if (addressText.includes(searchTerm)) {
+                        address.style.display = '';
+                    } else {
+                        address.style.display = 'none';
+                    }
+                }
+            });
+        });
+    </script>
+</body>
+</html>

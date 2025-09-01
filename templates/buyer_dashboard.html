@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Memorieo - Buyer Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #4A4A4A;
+            --secondary-color: #2E7D32;
+            --accent-color: #FF6B6B;
+            --background-color: #121212;
+            --text-color: #f8f9fa;
+            --light-text-color: #f8f9fa;
+            --card-bg: #1e1e1e;
+            --card-shadow: 0 4px 6px rgba(255,255,255,0.1);
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .navbar {
+            background-color: rgba(108, 99, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .navbar-brand, .nav-link {
+            color: var(--text-color) !important;
+        }
+
+        .hero-section {
+            position: relative;
+            height: 500px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            color: var(--light-text-color);
+            overflow: hidden;
+        }
+
+        .hero-video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+            filter: brightness(0.5);
+        }
+
+        .hero-content {
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-content h1 {
+            font-size: 4rem;
+            font-weight: bold;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #6C63FF, #FF6B6B);
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradient 5s ease infinite;
+        }
+
+        @keyframes gradient {
+            0% {
+                background-position: 0% 50%;
+            }
+            50% {
+                background-position: 100% 50%;
+            }
+            100% {
+                background-position: 0% 50%;
+            }
+        }
+
+        .hero-content p {
+            font-size: 1.2rem;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+        }
+
+        .search-bar {
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        .search-bar .form-control {
+            border-radius: 50px;
+            padding-left: 20px;
+        }
+
+        .search-bar .input-group-text {
+            border-radius: 50px 0 0 50px;
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+            color: var(--light-text-color);
+        }
+
+        .product-card {
+            background-color: var(--card-bg);
+            border: none;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
+            height: 100%;
+            box-shadow: var(--card-shadow);
+        }
+
+        .product-card:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+        }
+
+        .product-card img {
+            height: 200px;
+            object-fit: cover;
+            width: 100%;
+            transition: transform 0.3s;
+        }
+
+        .product-card:hover img {
+            transform: scale(1.1);
+        }
+
+        .product-card .card-body {
+            display: flex;
+            flex-direction: column;
+            padding: 1.5rem;
+        }
+
+        .product-card .product-title {
+            font-size: 1.2rem;
+            font-weight: bold;
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card .product-price {
+            font-size: 1.1rem;
+            font-weight: bold;
+            color: var(--accent-color);
+            margin-bottom: 0.5rem;
+        }
+
+        .product-card .product-details {
+            font-size: 0.9rem;
+            color: var(--text-color);
+            opacity: 0.8;
+            margin-bottom: 1rem;
+        }
+
+        .product-card .btn {
+            margin-top: auto;
+            border-radius: 50px;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .product-card .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            border-color: var(--primary-color);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+            border-color: var(--secondary-color);
+        }
+
+        .footer {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            padding: 2rem 0;
+            margin-top: 50px;
+        }
+
+        .modal-content {
+            border-radius: 15px;
+            overflow: hidden;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .modal-header, .modal-footer {
+            background-color: var(--primary-color);
+            color: var(--light-text-color);
+            border: none;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .user-option-btn {
+            text-align: left;
+            padding: 1rem;
+            margin-bottom: 0.5rem;
+            border-radius: 10px;
+            transition: background-color 0.3s, transform 0.3s;
+            background-color: var(--card-bg);
+            color: var(--text-color);
+        }
+
+        .user-option-btn:hover {
+            background-color: var(--secondary-color);
+            color: var(--light-text-color);
+            transform: translateX(5px);
+        }
+
+        .user-option-btn i {
+            margin-right: 10px;
+        }
+
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: bold;
+            margin-bottom: 2rem;
+            text-align: center;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .filters {
+            margin-bottom: 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .filter-dropdown {
+            width: 200px;
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container">
+            <a class="navbar-brand" href="#">Memorieo</a>
+            <span class="mr-4"> | Welcome, <strong>{{ session['name'] }}</strong></span>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="#"><i class="fas fa-home"></i> Home</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('cart') }}"><i class="fa fa-shopping-cart"></i> Cart</a>
+                    </li>
+                    {% if session['role'] == 'seller' %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{{ url_for('seller_dashboard') }}">
+                            <i class="fas fa-store"></i> Switch to Seller View
+                        </a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" id="profile-btn"><i class="fas fa-user-circle"></i> Profile</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" onclick="confirmLogout(event)">
+                            <i class="fas fa-sign-out-alt"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <section class="hero-section">
+        <video autoplay muted loop class="hero-video">
+            <source src="/static/videos/bgvideo3.mp4" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <div class="container hero-content">
+            <h1>Explore Amazing Photobooks</h1>
+            <p>Customize your own photobook with different sizes and page options to preserve your precious memories.</p>
+            <form action="/buyer_dashboard" method="GET" class="search-bar input-group mb-3">
+                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                <input 
+                    type="text" 
+                    class="form-control" 
+                    name="query" 
+                    value="{{ search_query }}" 
+                    placeholder="Search for products..." 
+                    aria-label="Search for products"
+                >
+                <button class="btn btn-primary" type="submit">Search</button>
+            </form>
+        </div>
+    </section>
+
+    <section class="container my-5">
+        <div class="filters">
+            <h2 class="section-title mb-0">Available Photobooks</h2>
+            <form method="get" action="{{ url_for('buyer_dashboard') }}" class="d-flex gap-3">
+                <!-- Default to "All Categories", if no category is selected -->
+                <select class="form-select filter-dropdown" aria-label="Filter products" name="category_id" onchange="this.form.submit()">
+                    <option value="all" {% if selected_category == 'all' %}selected{% endif %}>All Categories</option>
+        
+                    <!-- Loop through categories to display each one -->
+                    {% for category in categories %}
+                        <option value="{{ category[0] }}" {% if selected_category == category[0] %}selected{% endif %}>
+                            {{ category[1] }}
+                        </option>
+                    {% endfor %}
+                </select>
+                <button type="submit" class="btn btn-primary">Apply</button>
+            </form>
+        </div>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="product-container">
+            {% for product in products %}
+            <div class="col product-item">
+                <div class="product-card" data-bs-toggle="modal" data-bs-target="#productModal" 
+                     data-id="{{ product['id'] }}" 
+                     data-name="{{ product['product_name'] }}" 
+                     data-price="{{ product['price'] }}" 
+                     data-size="{{ product['size'] }}" 
+                     data-pages="{{ product['pages'] }}"                      
+                     data-image="{{ product.image_path | image_path }}">
+                    <img src="{{ product.image_path | image_path }}" class="card-img-top" alt="{{ product['product_name'] }}">
+                    <div class="card-body">
+                        <h5 class="product-title">{{ product['product_name'] }}</h5>
+                        <p class="product-price">₱{{ product['price'] }}</p>
+                        <p class="product-details">Size: {{ product['size'] }} | Pages: {{ product['pages'] }}</p>
+                        <form method="POST" action="{{ url_for('add_to_cart') }}">
+                            <input type="hidden" name="product_id" value="{{ product['id'] }}">
+                            <button type="submit" class="btn btn-primary w-100">Add to Cart</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>        
+    </section>
+    <footer class="footer text-center">
+        <div class="container">
+            <p>&copy; 2024 Memorieo. All Rights Reserved.</p>
+            <div class="mt-3">
+                <a href="https://www.facebook.com/p/Memorieo-61569346288415/?mibextid=ZbWKwL" target="blank" class="text-white me-3">
+                    <i class="fab fa-facebook-f"></i>
+                </a>
+                <a href="https://x.com/memorieo481?t=Doe64mYHAHhNPmRPXm0V-Q&s=07" target="blank" class="text-white me-3">
+                    <i class="fab fa-twitter"></i>
+                </a>
+                <a href="https://www.instagram.com/me_morieo/profilecard/?igsh=N2tqZDVuYjhqc2p2" target="blank" class="text-white me-3">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://pin.it/7aPrK3wOW" target="blank" class="text-white">
+                    <i class="fab fa-pinterest-p"></i>
+                </a>
+            </div>
+        </div>
+    </footer>    
+    <div class="modal fade" id="productModal" tabindex="-1" aria-labelledby="productModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="productModalLabel"></h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <img id="productModalImage" src="" class="img-fluid mb-3" alt="">
+                    <p><strong>Price:</strong> ₱<span id="productModalPrice"></span></p>
+                    <p><strong>Size:</strong> <span id="productModalSize"></span></p>
+                    <p><strong>Pages:</strong> <span id="productModalPages"></span></p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Update the Profile Modal section -->
+    <div class="modal fade" id="profileModal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="profileModalLabel">User Profile</h5>
+                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <h5 class="text-center mb-4">Manage Your Account</h5>
+                    <div class="d-grid gap-2">
+                        <a href="{{ url_for('orders_dashboard') }}" class="btn user-option-btn">
+                            <i class="fas fa-box"></i> My Orders
+                        </a>
+                        <a href="{{ url_for('addresses_dashboard') }}" class="btn user-option-btn">
+                            <i class="fas fa-map-marker-alt"></i> My Addresses
+                        </a>
+                        {% if session['role'] == 'buyer' %}
+                            <!-- Only show these options for buyers -->
+                            <a href="{{ url_for('account_settings_dashboard') }}" class="btn user-option-btn">
+                                <i class="fas fa-cog"></i> Account Settings
+                            </a>
+                            <a href="{{ url_for('seller_registration') }}" class="btn btn-warning user-option-btn">
+                                <i class="fas fa-store"></i> Become a Seller
+                            </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        document.getElementById('profile-btn').addEventListener('click', function() {
+            var profileModal = new bootstrap.Modal(document.getElementById('profileModal'));
+            profileModal.show();
+        });
+
+        function confirmLogout(event) {
+            event.preventDefault();
+            const confirmed = confirm("Are you sure you want to log out?");
+            if (confirmed) {
+                window.location.href = "/logout";
+            }
+        }
+        function filterByCategory(categoryId) {
+            // This is a placeholder function. In a real application, you would
+            // implement the filtering logic here, possibly making an AJAX call
+            // to the server to get filtered results.
+            console.log("Filtering by category:", categoryId);
+        }
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const productModal = document.getElementById('productModal');
+    
+            productModal.addEventListener('show.bs.modal', event => {
+                const productCard = event.relatedTarget; // Element that triggered the modal
+    
+                // Get product details from data attributes
+                const productName = productCard.getAttribute('data-name');
+                const productPrice = productCard.getAttribute('data-price');
+                const productSize = productCard.getAttribute('data-size');
+                const productPages = productCard.getAttribute('data-pages');                
+                const productImage = productCard.getAttribute('data-image');
+    
+                // Update modal content
+                productModal.querySelector('#productModalLabel').textContent = productName;
+                productModal.querySelector('#productModalPrice').textContent = productPrice;
+                productModal.querySelector('#productModalSize').textContent = productSize;
+                productModal.querySelector('#productModalPages').textContent = productPages;
+                productModal.querySelector('#productModalImage').src = productImage;
+                productModal.querySelector('#productModalImage').alt = productName;
+            });
+        });
+    </script>
+    
+</body>
+</html>

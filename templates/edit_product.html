@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Product - Memorieo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8983FF;
+            --secondary-color: #66BB6A;
+            --accent-color: #FF8A80;
+            --background-color: #1F2937;
+            --text-color: #E5E7EB;
+            --card-bg: #374151;
+            --input-bg: #4B5563;
+            --input-border: #6B7280;
+            --input-focus: #9CA3AF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background-color: var(--card-bg);
+            border-radius: 20px;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            overflow: hidden;
+            position: relative;
+        }
+
+        .header {
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: #ffffff;
+            padding: 30px;
+            text-align: center;
+            font-size: 2rem;
+            font-weight: 700;
+        }
+
+        .form-content {
+            padding: 40px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-color);
+            transition: color 0.3s;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon i {
+            position: absolute;
+            top: 50%;
+            left: 15px;
+            transform: translateY(-50%);
+            color: var(--primary-color);
+            transition: color 0.3s;
+        }
+
+        .input-field {
+            width: 100%;
+            padding: 12px 15px 12px 45px;
+            border: 2px solid var(--input-border);
+            border-radius: 10px;
+            font-size: 1rem;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+
+        .input-field:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            border: none;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn:hover {
+            background-color: var(--secondary-color);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px -10px rgba(0, 0, 0, 0.3);
+        }
+
+        .btn-exit {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background-color: var(--accent-color);
+            padding: 8px 16px;
+            font-size: 0.9rem;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <form method="GET" action="{{ url_for('seller_dashboard') }}">
+            <button type="submit" class="btn btn-exit">Exit</button>
+        </form>
+        <div class="header">
+            <span class="gradient-text">Edit Product</span>
+        </div>
+        <div class="form-content">
+            <form action="" method="POST">
+                <div class="form-group">
+                    <label for="product_name">Product Name</label>
+                    <div class="input-icon">
+                        <i class="fas fa-tag"></i>
+                        <input type="text" id="product_name" name="product_name" value="{{ product[1] }}" class="input-field" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="size">Size</label>
+                    <div class="input-icon">
+                        <i class="fas fa-ruler"></i>
+                        <input type="text" id="size" name="size" value="{{ product[2] }}" class="input-field" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="pages">Pages</label>
+                    <div class="input-icon">
+                        <i class="fas fa-book-open"></i>
+                        <input type="number" id="pages" name="pages" value="{{ product[3] }}" class="input-field" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="stock">Stock</label>
+                    <div class="input-icon">
+                        <i class="fas fa-boxes"></i>
+                        <input type="number" id="stock" name="stock" value="{{ product[4] }}" class="input-field" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="price">Price</label>
+                    <div class="input-icon">
+                        <i class="fas fa-dollar-sign"></i>
+                        <input type="number" id="price" name="price" step="0.01" value="{{ product[5] }}" class="input-field" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <button type="submit" class="btn">
+                        <i class="fas fa-save"></i> Save Changes
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+</html>

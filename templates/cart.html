@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Memorieo</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #8983FF;
+            --secondary-color: #66BB6A;
+            --accent-color: #FF8A80;
+            --background-color: #1F2937;
+            --text-color: #E5E7EB;
+            --card-bg: #374151;
+            --input-bg: #4B5563;
+            --input-border: #6B7280;
+            --input-focus: #9CA3AF;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 2rem;
+        }
+
+        .cart-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+        }
+
+        .cart-header .btn {
+            margin-right: 1rem;
+        }
+
+        .cart-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+
+        .cart-table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0 1rem;
+        }
+
+        .cart-table th {
+            text-align: left;
+            padding: 1rem;
+            background-color: var(--primary-color);
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        .cart-table td {
+            padding: 1rem;
+            background-color: var(--card-bg);
+            transition: background-color 0.3s;
+        }
+
+        .cart-table tr {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+
+        .cart-table tr:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-table th:first-child,
+        .cart-table td:first-child {
+            border-top-left-radius: 10px;
+            border-bottom-left-radius: 10px;
+        }
+
+        .cart-table th:last-child,
+        .cart-table td:last-child {
+            border-top-right-radius: 10px;
+            border-bottom-right-radius: 10px;
+        }
+
+        .quantity-input {
+            width: 60px;
+            padding: 0.5rem;
+            border: 2px solid var(--input-border);
+            border-radius: 5px;
+            background-color: var(--input-bg);
+            color: var(--text-color);
+            transition: all 0.3s;
+        }
+
+        .quantity-input:focus {
+            outline: none;
+            border-color: var(--input-focus);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.25);
+        }
+
+        .btn {
+            display: inline-block;
+            padding: 0.5rem 1rem;
+            border: none;
+            border-radius: 5px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: #ffffff;
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: #ffffff;
+        }
+
+        .btn-success {
+            background-color: var(--secondary-color);
+            color: #ffffff;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .cart-summary {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 2rem;
+            padding: 1rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .cart-total {
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+
+        .empty-cart {
+            text-align: center;
+            padding: 2rem;
+            background-color: var(--card-bg);
+            border-radius: 10px;
+            transition: background-color 0.3s;
+        }
+
+        .empty-cart i {
+            font-size: 4rem;
+            color: var(--primary-color);
+            margin-bottom: 1rem;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .cart-item {
+            animation: fadeIn 0.5s ease-out forwards;
+        }
+
+        .cart-item:nth-child(1) { animation-delay: 0.1s; }
+        .cart-item:nth-child(2) { animation-delay: 0.2s; }
+        .cart-item:nth-child(3) { animation-delay: 0.3s; }
+        .cart-item:nth-child(4) { animation-delay: 0.4s; }
+        .cart-item:nth-child(5) { animation-delay: 0.5s; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="cart-header">
+            <a href="/buyer_dashboard" class="btn btn-primary">
+                <i class="fas fa-home"></i> Home
+            </a>            
+            <h1 class="cart-title">Your Cart</h1>
+        </div>
+        {% if cart_items %}
+            <table class="cart-table">
+                <thead>
+                    <tr>
+                        <th><input type="checkbox" id="selectAll"> Select</th>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                        <tr class="cart-item">
+                            <td>
+                                <input type="checkbox" name="selected_items" value="{{ item['id'] }}" class="item-checkbox">
+                            </td>
+                            <td>{{ item['name'] }}</td>
+                            <td>₱{{ item['price'] }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('update_cart') }}" class="d-flex align-items-center">
+                                    <input type="hidden" name="product_id" value="{{ item['id'] }}">
+                                    <input type="number" name="quantity" value="{{ item['quantity'] }}" min="1" class="quantity-input">
+                                    <button type="submit" class="btn btn-primary ml-2">Update</button>
+                                </form>
+                            </td>
+                            <td>₱{{ item['price'] * item['quantity'] }}</td>
+                            <td>
+                                <form method="POST" action="{{ url_for('remove_from_cart') }}">
+                                    <input type="hidden" name="product_id" value="{{ item['id'] }}">
+                                    <button type="submit" class="btn btn-danger">Remove</button>
+                                </form>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <div class="cart-summary">
+                <h4 class="cart-total">Total: ₱<span id="selected-total">{{ total_price }}</span></h4>
+                <form action="{{ url_for('checkout') }}" method="POST" id="checkout-form">
+                    <input type="hidden" name="selected_items" id="selected-items-input">
+                    <button type="submit" class="btn btn-success" id="checkout-btn" disabled>Proceed to Checkout</button>
+                </form>
+            </div>            
+        {% else %}
+            <div class="empty-cart">
+                <i class="fas fa-shopping-cart"></i>
+                <p>Your cart is empty.</p>
+            </div>
+        {% endif %}
+    </div>
+    <script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const selectAll = document.getElementById('selectAll');
+        const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+        const checkoutBtn = document.getElementById('checkout-btn');
+        const checkoutForm = document.getElementById('checkout-form');
+        const selectedItemsInput = document.getElementById('selected-items-input');
+        const selectedTotalSpan = document.getElementById('selected-total');
+
+        function updateCheckoutButton() {
+            const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
+            checkoutBtn.disabled = checkedBoxes.length === 0;
+            
+            // Calculate selected items total
+            let selectedTotal = 0;
+            checkedBoxes.forEach(checkbox => {
+                const row = checkbox.closest('tr');
+                const priceText = row.querySelector('td:nth-child(5)').textContent;
+                const price = parseFloat(priceText.replace('₱', ''));
+                selectedTotal += price;
+            });
+            selectedTotalSpan.textContent = selectedTotal.toFixed(2);
+        }
+
+        selectAll.addEventListener('change', function() {
+            itemCheckboxes.forEach(checkbox => {
+                checkbox.checked = this.checked;
+            });
+            updateCheckoutButton();
+        });
+
+        itemCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                selectAll.checked = [...itemCheckboxes].every(cb => cb.checked);
+                updateCheckoutButton();
+            });
+        });
+
+        checkoutForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            const selectedItems = [...document.querySelectorAll('.item-checkbox:checked')]
+                .map(cb => cb.value);
+            selectedItemsInput.value = JSON.stringify(selectedItems);
+            this.submit();
+        });
+    });
+    </script>
+</body>
+</html>

@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Terms of Service - Memorieo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #a78bfa, #ec4899);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 5s ease infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-90">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold">Memorieo</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="hover:text-purple-400 transition-colors">Home</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 pt-24">
+        <h1 class="text-4xl font-bold mb-8 gradient-text">Terms of Service</h1>
+        <div class="max-w-4xl mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+            <div class="space-y-6">
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">1. Acceptance of Terms</h2>
+                    <p class="text-gray-300">By accessing and using Memorieo's services, you agree to be bound by these Terms of Service. If you do not agree to these terms, please do not use our services.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">2. Use of Services</h2>
+                    <p class="text-gray-300">Our photobook creation services are intended for personal use. You agree to use these services in compliance with all applicable laws and regulations.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">3. User Content</h2>
+                    <p class="text-gray-300">You retain all rights to the photos and content you upload to our platform. By using our services, you grant us permission to process and print your content for the purpose of creating your photobook.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">4. Payment and Refunds</h2>
+                    <p class="text-gray-300">All payments are processed securely. Refunds are available according to our refund policy for products that don't meet our quality standards.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">5. Delivery</h2>
+                    <p class="text-gray-300">We strive to deliver all photobooks within the estimated delivery timeframe. Delivery times may vary based on location and shipping method selected.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">6. Privacy</h2>
+                    <p class="text-gray-300">Your privacy is important to us. Please review our Privacy Policy to understand how we collect and use your information.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">7. Modifications</h2>
+                    <p class="text-gray-300">We reserve the right to modify these terms at any time. Continued use of our services after changes constitutes acceptance of the modified terms.</p>
+                </section>
+
+                <section>
+                    <h2 class="text-2xl font-semibold mb-4">8. Contact</h2>
+                    <p class="text-gray-300">If you have any questions about these Terms of Service, please contact us through our <a href="/contact" class="text-purple-400 hover:text-purple-300">Contact Page</a>.</p>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8 mt-20">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Memorieo. All Rights Reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="/privacy-policy" class="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
+                <a href="/terms-of-service" class="text-gray-400 hover:text-purple-400 transition-colors">Terms of Service</a>
+                <a href="/contact" class="text-gray-400 hover:text-purple-400 transition-colors">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>

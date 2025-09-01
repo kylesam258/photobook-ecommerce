@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us - Memorieo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <style>
+        @keyframes gradientText {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+        .gradient-text {
+            background: linear-gradient(45deg, #a78bfa, #ec4899);
+            background-size: 200% auto;
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: gradientText 5s ease infinite;
+        }
+    </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-gray-900 to-gray-800 text-white">
+    <!-- Navigation -->
+    <header class="fixed top-0 left-0 right-0 z-50 bg-gray-900 bg-opacity-90">
+        <nav class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <a href="/" class="text-2xl font-bold">Memorieo</a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="/" class="hover:text-purple-400 transition-colors">Home</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <!-- Main Content -->
+    <div class="container mx-auto px-6 pt-24">
+        <h1 class="text-4xl font-bold mb-8 gradient-text">Contact Us</h1>
+        <div class="max-w-lg mx-auto bg-gray-800 p-8 rounded-lg shadow-lg">
+            <form>
+                <div class="mb-6">
+                    <label class="block mb-2">Name</label>
+                    <input type="text" class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2">Email</label>
+                    <input type="email" class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white" required>
+                </div>
+                <div class="mb-6">
+                    <label class="block mb-2">Message</label>
+                    <textarea class="w-full p-2 rounded bg-gray-700 border border-gray-600 text-white" rows="5" required></textarea>
+                </div>
+                <button type="submit" class="bg-purple-600 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded transition-colors w-full">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 py-8 mt-20">
+        <div class="container mx-auto px-6 text-center">
+            <p>&copy; 2024 Memorieo. All Rights Reserved.</p>
+            <div class="mt-4 space-x-4">
+                <a href="/privacy-policy" class="text-gray-400 hover:text-purple-400 transition-colors">Privacy Policy</a>
+                <a href="/terms-of-service" class="text-gray-400 hover:text-purple-400 transition-colors">Terms of Service</a>
+                <a href="/contact" class="text-gray-400 hover:text-purple-400 transition-colors">Contact Us</a>
+            </div>
+        </div>
+    </footer>
+</body>
+</html>
