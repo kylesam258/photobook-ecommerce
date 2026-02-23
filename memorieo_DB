@@ -1,0 +1,194 @@
+/*
+SQLyog Ultimate v10.00 Beta1
+MySQL - 5.5.5-10.4.32-MariaDB : Database - ecommerce_db_backup
+*********************************************************************
+*/
+
+/*!40101 SET NAMES utf8 */;
+
+/*!40101 SET SQL_MODE=''*/;
+
+/*!40014 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0 */;
+/*!40014 SET @OLD_FOREIGN_KEY_CHECKS=@@FOREIGN_KEY_CHECKS, FOREIGN_KEY_CHECKS=0 */;
+/*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
+/*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
+CREATE DATABASE /*!32312 IF NOT EXISTS*/`ecommerce_db_backup` /*!40100 DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci */;
+
+USE `ecommerce_db_backup`;
+
+/*Table structure for table `addresses` */
+
+DROP TABLE IF EXISTS `addresses`;
+
+CREATE TABLE `addresses` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `address` text NOT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `addresses_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `addresses` */
+
+insert  into `addresses`(`id`,`user_id`,`name`,`address`,`phone`,`created_at`) values (1,1,'kyle sam camunias','purok 1, san juan kalayaan laguna','09198765432','2024-12-10 12:22:53'),(2,1,'kyle sam camunias','sta cruz laguna','0987654321','2024-12-10 12:23:15'),(3,2,'Michelle Francia','purok 1, Brgy. Suba, Majayjay, Laguna','09514234074','2024-12-10 13:25:17'),(4,25,'Leeroy Depatillo','5 LSPU','0987654321','2024-12-10 15:16:00'),(5,25,'Sam','5 Okay','09637365994','2024-12-10 15:16:15');
+
+/*Table structure for table `cart_items` */
+
+DROP TABLE IF EXISTS `cart_items`;
+
+CREATE TABLE `cart_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL DEFAULT 1,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `cart_items_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `cart_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `cart_items` */
+
+/*Table structure for table `categories` */
+
+DROP TABLE IF EXISTS `categories`;
+
+CREATE TABLE `categories` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `name` (`name`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `categories` */
+
+insert  into `categories`(`id`,`name`) values (2,'Family'),(4,'Friends'),(3,'Travel'),(5,'Wedding');
+
+/*Table structure for table `order_items` */
+
+DROP TABLE IF EXISTS `order_items`;
+
+CREATE TABLE `order_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `order_id` int(11) NOT NULL,
+  `product_id` int(11) NOT NULL,
+  `quantity` int(11) NOT NULL,
+  `price` decimal(10,2) NOT NULL,
+  `seller_status` enum('Pending','Shipped','Delivered') DEFAULT 'Pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `order_id` (`order_id`),
+  KEY `product_id` (`product_id`),
+  CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`order_id`) REFERENCES `orders` (`id`),
+  CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`product_id`) REFERENCES `products` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `order_items` */
+
+insert  into `order_items`(`id`,`order_id`,`product_id`,`quantity`,`price`,`seller_status`,`created_at`) values (27,12,4,1,'500.00','Pending','2025-04-17 10:33:11'),(28,13,2,1,'700.00','Pending','2025-04-17 10:34:42'),(29,14,7,1,'200.00','Pending','2025-04-17 10:36:11'),(30,15,1,1,'800.00','Pending','2025-04-17 10:36:58'),(31,16,3,4,'600.00','Pending','2025-09-01 18:20:21');
+
+/*Table structure for table `orders` */
+
+DROP TABLE IF EXISTS `orders`;
+
+CREATE TABLE `orders` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `address_id` int(11) NOT NULL,
+  `payment_method` varchar(50) NOT NULL,
+  `status` enum('Pending','Shipped','Delivered','Cancelled') DEFAULT 'Pending',
+  `total_amount` decimal(10,2) NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `address_id` (`address_id`),
+  CONSTRAINT `orders_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `orders_ibfk_2` FOREIGN KEY (`address_id`) REFERENCES `addresses` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=17 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `orders` */
+
+insert  into `orders`(`id`,`user_id`,`address_id`,`payment_method`,`status`,`total_amount`,`created_at`) values (12,1,1,'Cash On Delivery','Cancelled','500.00','2025-04-17 10:33:11'),(13,1,1,'Cash On Delivery','Shipped','700.00','2025-04-17 10:34:42'),(14,1,1,'Cash On Delivery','Pending','200.00','2025-04-17 10:36:11'),(15,1,1,'Cash On Delivery','Delivered','800.00','2025-04-17 10:36:58'),(16,1,2,'Cash On Delivery','Pending','2400.00','2025-09-01 18:20:21');
+
+/*Table structure for table `products` */
+
+DROP TABLE IF EXISTS `products`;
+
+CREATE TABLE `products` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) DEFAULT NULL,
+  `category_id` int(11) DEFAULT NULL,
+  `product_name` varchar(255) NOT NULL,
+  `size` varchar(50) DEFAULT NULL,
+  `pages` int(11) DEFAULT NULL,
+  `stock` int(11) NOT NULL DEFAULT 0,
+  `price` decimal(10,2) NOT NULL,
+  `image_path` varchar(255) DEFAULT NULL,
+  `is_archive` tinyint(1) DEFAULT 0,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  KEY `category_id` (`category_id`),
+  CONSTRAINT `products_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`),
+  CONSTRAINT `products_ibfk_2` FOREIGN KEY (`category_id`) REFERENCES `categories` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=36 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `products` */
+
+insert  into `products`(`id`,`user_id`,`category_id`,`product_name`,`size`,`pages`,`stock`,`price`,`image_path`,`is_archive`,`created_at`) values (1,2,2,'Family Ties: A Love Story','9x4',10,100,'800.00','family1.jpg',0,'2024-12-10 11:54:35'),(2,2,2,'Our Family Album','8x9',20,100,'700.00','family2.jpg',0,'2024-12-10 11:55:31'),(3,2,2,'Family Moments: Forever Captured','7x7',30,100,'600.00','family3.png',0,'2024-12-10 11:56:10'),(4,2,2,'Love and Family','9x9',40,100,'500.00','family4.png',0,'2024-12-10 11:56:44'),(5,2,2,'Family Memories: A Visual Legacy','5x6',50,100,'400.00','family5.png',0,'2024-12-10 11:57:21'),(6,2,2,'Our Family Story','7x7',60,100,'300.00','family6.png',0,'2024-12-10 11:58:16'),(7,2,2,'Family Roots: A Heritage of Love','5x6',70,100,'200.00','family7.png',0,'2024-12-10 11:59:14'),(8,2,2,'Family Treasures','8x8',80,100,'100.00','family8.png',0,'2024-12-10 12:00:08'),(9,2,4,'Friends Forever: A Lifetime of Memories','9x4',10,100,'800.00','friends1.png',0,'2024-12-10 12:05:36'),(10,2,4,'The Friendship Album','7x7',20,100,'700.00','friends2.png',0,'2024-12-10 12:06:10'),(11,2,4,'Love and Laughter: Friends Through the Years','8x8',30,100,'600.00','friends3.png',0,'2024-12-10 12:06:42'),(12,2,4,'Friends, Fun, and Adventures','5x6',40,100,'500.00','friends4.png',0,'2024-12-10 12:07:17'),(13,2,4,'Squad Goals: Our Favorite Moments','9x4',50,100,'400.00','friends5.png',0,'2024-12-10 12:08:02'),(14,2,4,'Friendship Frenzy: Capturing the Fun','7x7',60,100,'300.00','friends6.png',0,'2024-12-10 12:09:05'),(15,2,4,'Treasured Friends, Timeless Memories','8x8',70,100,'200.00','family7.png',0,'2024-12-10 12:09:49'),(16,2,4,'Friends: The Ones Who Matter Most','8x9',80,100,'100.00','friends8.png',0,'2024-12-10 12:10:31'),(17,2,3,'Travel Diaries: Exploring the World','8x9',10,100,'800.00','travel1.png',0,'2024-12-10 12:12:03'),(18,2,3,'Passport to Adventure','7x7',20,100,'700.00','travel2.png',0,'2024-12-10 12:12:28'),(19,2,3,'Wanderlust: Our Travel Story','5x6',30,100,'600.00','travel3.png',0,'2024-12-10 12:13:06'),(20,2,3,'Travels Through Canada','8x8',40,100,'500.00','travel4.png',0,'2024-12-10 12:14:00'),(21,2,3,'Discovering Macau: A Photographic Journey','8x8',50,100,'400.00','travel5.png',0,'2024-12-10 12:14:54'),(22,2,3,'New York Uncovered: Hidden Gems','9x4',60,100,'300.00','travel6.jpg',0,'2024-12-10 12:15:46'),(23,2,3,'Memories from Afar: Traveling Heart','8x9',70,100,'200.00','travel7.jpg',0,'2024-12-10 12:16:24'),(24,2,3,'The Traveling Life: Capturing Moments','5x6',80,100,'100.00','travel8.png',0,'2024-12-10 12:16:56'),(25,2,5,'Our Wedding Day: A Love Story','5x6',10,100,'800.00','wedding1.jpg',0,'2024-12-10 12:18:14'),(26,2,5,'Wedded Bliss: Forever and Always','9x4',20,100,'700.00','wedding2.jpg',0,'2024-12-10 12:18:42'),(27,2,5,'The Wedding Album','8x8',30,100,'600.00','wedding3.png',0,'2024-12-10 12:19:12'),(28,2,5,'Love Forever: Our Wedding Journey','7x7',40,100,'500.00','wedding4.png',0,'2024-12-10 12:19:51'),(29,2,5,'Once Upon a Wedding','8x8',50,100,'400.00','wedding5.png',0,'2024-12-10 12:20:20'),(30,2,5,'Happily Ever After: Our Special Day','8x9',60,100,'300.00','wedding6.png',0,'2024-12-10 12:20:49'),(31,2,5,'The Adventure Begins: Our Wedding Story','8x9',70,100,'200.00','wedding7.png',0,'2024-12-10 12:21:25'),(32,2,5,'Two Hearts, One Love: Our Wedding Celebration','9x4',80,100,'100.00','wedding8.png',0,'2024-12-10 12:21:54'),(33,24,2,'seller tqoo','7x7',67,56,'567.00','id.png',1,'2024-12-10 14:08:19'),(34,24,3,'The Friendship Album','8x9',9000,900,'899.00','id.png',1,'2024-12-10 14:08:44'),(35,25,3,'Leeroy\'s special','7x7',2,100,'700.00','wedding7.png',0,'2024-12-10 15:29:20');
+
+/*Table structure for table `seller_requests` */
+
+DROP TABLE IF EXISTS `seller_requests`;
+
+CREATE TABLE `seller_requests` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) NOT NULL,
+  `business_name` varchar(255) NOT NULL,
+  `contact_number` varchar(20) DEFAULT NULL,
+  `email` varchar(255) NOT NULL,
+  `id_proof` varchar(255) DEFAULT NULL,
+  `profile_description` text DEFAULT NULL,
+  `payment_details` text DEFAULT NULL,
+  `product_photo` varchar(255) DEFAULT NULL,
+  `status` enum('pending','approved','rejected') DEFAULT 'pending',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  KEY `user_id` (`user_id`),
+  CONSTRAINT `seller_requests_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=13 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `seller_requests` */
+
+insert  into `seller_requests`(`id`,`user_id`,`business_name`,`contact_number`,`email`,`id_proof`,`profile_description`,`payment_details`,`product_photo`,`status`,`created_at`) values (1,1,'photobook store','09163465858','kyle@gmail.com','id.png','reliable seller offering quality products with exceptional customer service','COD,GCASH','wedding5.png','pending','2024-12-10 12:51:06'),(2,4,'Smith Photography Studio','+63 912 345 6789','john.smith@gmail.com','id.png','Professional photographer specializing in wedding and event photography with 5 years of experience.','GCash: 0912-345-6789','SAMPLE_john_smith.jpg','pending','2024-12-10 13:03:25'),(3,5,'Garcia Memory Books','+63 923 456 7890','maria.garcia@yahoo.com','id.png','Expert in creating custom photo albums and memory books. Certified in digital design.','PayMaya: 0923-456-7890','SAMPLE_maria_garcia.jpg','pending','2024-12-10 13:03:25'),(4,6,'Chen Digital Prints','+63 934 567 8901','david.chen@outlook.com','id.png','Specialized in high-quality digital prints and photo restoration. 10 years in the industry.','GCash: 0934-567-8901','SAMPLE_david_chen.jpg','pending','2024-12-10 13:03:25'),(5,7,'Sarah J Photography','+63 945 678 9012','sarah.j@hotmail.com','id.png','Portrait and family photographer with a modern studio setup. Professional certification from PPAP.','PayMaya: 0945-678-9012','SAMPLE_sarah_johnson.jpg','pending','2024-12-10 13:03:25'),(6,8,'Brown Photo Gallery','+63 956 789 0123','michael.brown@gmail.com','id.png','Commercial photographer offering premium photo printing services. Expert in product photography.','GCash: 0956-789-0123','SAMPLE_michael_brown.jpg','pending','2024-12-10 13:03:25'),(7,9,'Wilson Photography Co.','+63 967 890 1234','emma.wilson@yahoo.com','id.png','Lifestyle and portrait photographer with expertise in photo book creation.','PayMaya: 0967-890-1234','SAMPLE_emma_wilson.jpg','pending','2024-12-10 13:03:25'),(8,10,'Lee Digital Arts','+63 978 901 2345','james.lee@outlook.com','id.png','Digital artist specializing in photo enhancement and creative editing.','GCash: 0978-901-2345','SAMPLE_james_lee.jpg','pending','2024-12-10 13:03:25'),(9,11,'Sofia R Photo Studio','+63 989 012 3456','sofia.r@hotmail.com','id.png','Professional photographer focusing on family portraits and special events.','PayMaya: 0989-012-3456','SAMPLE_sofia_rodriguez.jpg','pending','2024-12-10 13:03:25'),(10,12,'Taylor Photo Services','+63 990 123 4567','william.t@gmail.com','id.png','Experienced in various photography styles with full printing services.','GCash: 0990-123-4567','SAMPLE_william_taylor.jpg','pending','2024-12-10 13:03:25'),(11,13,'Anderson Photography','+63 901 234 5678','olivia.a@yahoo.com','id.png','Specialized in creating custom photo albums and creative memory books.','PayMaya: 0901-234-5678','SAMPLE_olivia_anderson.jpg','pending','2024-12-10 13:03:25'),(12,25,'leeroy\'s photobook store','0987654321','leeroy.d@gmail.com','id.png','ayos','COD','wedding7.png','approved','2024-12-10 15:24:02');
+
+/*Table structure for table `users` */
+
+DROP TABLE IF EXISTS `users`;
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `password` varchar(255) NOT NULL,
+  `role` enum('admin','buyer','seller') DEFAULT 'buyer',
+  `status` enum('active','archived') DEFAULT 'active',
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB AUTO_INCREMENT=27 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+/*Data for the table `users` */
+
+insert  into `users`(`id`,`name`,`email`,`password`,`role`,`status`,`created_at`) values (1,'kyle sam','kyle@gmail.com','pbkdf2:sha256:600000$HbLCiwOmpRnh6Bl2$b41c60d718798248b290a78c636b58ff74f10846d7d998425addb9e73273fefc','buyer','active','2024-12-10 11:50:14'),(2,'Kyle Sam Camunias','selleredited@gmail.com','pbkdf2:sha256:600000$xWAPrA1S4cpzF5L9$46fdeb307ea078a158f145de4c32cd54de26c8bdad723f89191654cb80702714','seller','active','2024-12-10 11:51:16'),(3,'kyle admin','adminK@gmail.com','pbkdf2:sha256:600000$CpeqS6WHbThmVelf$be552c01fe6a01a2d36742b78951db705fe7110f1bacbfe9ec968c33a25ffebe','admin','active','2024-12-10 12:52:09'),(4,'John Smith','john.smith@gmail.com','pbkdf2:sha256:600000$vx1GmZ5p$8d7d6e5c4b3a2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4','buyer','active','2024-12-10 12:59:06'),(5,'Maria Garcia','maria.garcia@yahoo.com','pbkdf2:sha256:600000$kL9mNp3q$7c6b5a4d3e2f1g0h9i8j7k6l5m4n3o2p1q0r9s8t7u6v5','buyer','active','2024-12-10 12:59:06'),(6,'David Chen','david.chen@outlook.com','pbkdf2:sha256:600000$tR5hJk2w$6b5a4c3d2e1f0g9h8i7j6k5l4m3n2o1p0q9r8s7t6u5v4','buyer','active','2024-12-10 12:59:06'),(7,'Sarah Johnson','sarah.j@hotmail.com','pbkdf2:sha256:600000$yU8iLm4n$5a4b3c2d1e0f9g8h7i6j5k4l3m2n1o0p9q8r7s6t5u4v3','buyer','active','2024-12-10 12:59:06'),(8,'Michael Brown','michael.brown@gmail.com','pbkdf2:sha256:600000$wQ7oPs5m$4d3e2f1g0h9i8j7k6l5m4n3o2p1q0r9s8t7u6v5w4x3','buyer','active','2024-12-10 12:59:06'),(9,'Emma Wilson','emma.wilson@yahoo.com','pbkdf2:sha256:600000$zX9cVb6n$3e2d1f0g9h8i7j6k5l4m3n2o1p0q9r8s7t6u5v4w3x2','buyer','active','2024-12-10 12:59:06'),(10,'James Lee','james.lee@outlook.com','pbkdf2:sha256:600000$nM8kLp4q$2f1e0d9c8b7a6f5e4d3c2b1a0f9e8d7c6b5a4d3e2f1g0','buyer','active','2024-12-10 12:59:06'),(11,'Sofia Rodriguez','sofia.r@hotmail.com','pbkdf2:sha256:600000$bH7jKm5t$1g0f9e8d7c6b5a4d3e2f1h0i9j8k7l6m5n4o3p2q1r0','buyer','active','2024-12-10 12:59:06'),(12,'William Taylor','william.t@gmail.com','pbkdf2:sha256:600000$qW9eRt3y$0h9g8f7e6d5c4b3a2i1j0k9l8m7n6o5p4q3r2s1t0u9','buyer','active','2024-12-10 12:59:06'),(13,'Olivia Anderson','olivia.a@yahoo.com','pbkdf2:sha256:600000$sD4fGh2x$9i8h7g6f5e4d3c2b1j0k9l8m7n6o5p4q3r2s1t0u9v8','buyer','active','2024-12-10 12:59:06'),(14,'Lucas Martinez','lucas.m@gmail.com','pbkdf2:sha256:600000$aQ1wSx3e$5d4c3b2a1f0e9d8c7b6a5f4e3d2c1b0a9f8e7d6c5b4a3n2','buyer','active','2024-12-10 13:00:40'),(15,'Isabella Kim','isabella.kim@yahoo.com','pbkdf2:sha256:600000$bR2xTy4f$4e3d2c1b0a9f8e7d6c5b4a3n2m1l0k9j8i7h6g5f4e3d','buyer','active','2024-12-10 13:00:40'),(16,'Alexander Wong','alex.wong@outlook.com','pbkdf2:sha256:600000$cS3yUz5g$3f2e1d0c9b8a7f6e5d4c3b2a1n0m9l8k7j6i5h4g3f2e','buyer','active','2024-12-10 13:00:40'),(17,'Sophia Patel','sophia.p@hotmail.com','pbkdf2:sha256:600000$dT4zVa6h$2g3f4e5d6c7b8a9f0e1d2c3b4a5n6m7l8k9j0i1h2g3f','buyer','active','2024-12-10 13:00:40'),(18,'Ethan Thompson','ethan.t@gmail.com','pbkdf2:sha256:600000$eU5aWb7i$1h4g3f2e1d0c9b8a7f6e5d4c3b2a1n0m9l8k7j6i5h4g','buyer','active','2024-12-10 13:00:40'),(19,'Ava Nguyen','ava.nguyen@yahoo.com','pbkdf2:sha256:600000$fV6bXc8j$0i5h4g3f2e1d0c9b8a7f6e5d4c3b2a1n0m9l8k7j6i5','buyer','active','2024-12-10 13:00:40'),(20,'Daniel Santos','daniel.s@outlook.com','pbkdf2:sha256:600000$gW7cYd9k$9j6i5h4g3f2e1d0c9b8a7f6e5d4c3b2a1n0m9l8k7j6','buyer','active','2024-12-10 13:00:40'),(21,'Mia Collins','mia.collins@hotmail.com','pbkdf2:sha256:600000$hX8dZe0l$8k7j6i5h4g3f2e1d0c9b8a7f6e5d4c3b2a1n0m9l8k','buyer','active','2024-12-10 13:00:40'),(22,'Benjamin Park','ben.park@gmail.com','pbkdf2:sha256:600000$iY9eAf1m$7l8k7j6i5h4g3f2e1d0c9b8a7f6e5d4c3b2a1n0m9l','buyer','active','2024-12-10 13:00:40'),(23,'Victoria Singh','victoria.s@yahoo.com','pbkdf2:sha256:600000$jZ0fBg2n$6m9l8k7j6i5h4g3f2e1d0c9b8a7f6e5d4c3b2a1n0m','buyer','active','2024-12-10 13:00:40'),(24,'seller two','sellertwo@gmail.com','pbkdf2:sha256:600000$NRvlkbwhmfDWMnbx$3d59ff4f98c3b6a0b9bb3e3daaba5b8b1caf936d5d88340dec495de46bff1b73','seller','active','2024-12-10 14:07:09'),(25,'Leeroy Depatillo','leeroy.d@gmail.com','pbkdf2:sha256:600000$1u2jnjKy5fL3Zbko$01cc0cc7fe96bc62876ecfb43ea939c8c05dcda02ec727098e7c26bb92ef185c','seller','active','2024-12-10 15:11:35');
+
+/*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
+/*!40014 SET FOREIGN_KEY_CHECKS=@OLD_FOREIGN_KEY_CHECKS */;
+/*!40014 SET UNIQUE_CHECKS=@OLD_UNIQUE_CHECKS */;
+/*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
